@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model area {
+  area_id                                 Int          @id @default(autoincrement())
+  user_id                                 Int
+  action_id                               Int
+  reaction_id                             Int
+  created_at                              DateTime?    @default(dbgenerated("CURRENT_DATE")) @db.Date
+  area_event_area_action_idToarea_event   area_event   @relation("area_action_idToarea_event", fields: [action_id], references: [area_event_id], onDelete: NoAction, onUpdate: NoAction)
+  area_event_area_reaction_idToarea_event area_event   @relation("area_reaction_idToarea_event", fields: [reaction_id], references: [area_event_id], onDelete: NoAction, onUpdate: NoAction)
+  user                                    user         @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction)
+  area_event_area_event_area_idToarea     area_event[] @relation("area_event_area_idToarea")
+}
+
+model event {
+  event_id   Int          @id @default(autoincrement())
+  service_id Int
+  name       String       @db.VarChar(255)
+  endpoint   String       @db.VarChar(255)
+  created_at DateTime?    @default(dbgenerated("CURRENT_DATE")) @db.Date
+  area_event area_event[]
+  service    service      @relation(fields: [service_id], references: [service_id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model service {
+  service_id   Int            @id @default(autoincrement())
+  name         String         @unique @db.VarChar(255)
+  created_at   DateTime?      @default(dbgenerated("CURRENT_DATE")) @db.Date
+  event        event[]
+  user_service user_service[]
+}
+
+model user {
+  user_id      Int            @id @default(autoincrement())
+  email        String         @unique @db.VarChar(255)
+  password     String         @db.VarChar(255)
+  username     String         @db.VarChar(255)
+  created_at   DateTime?      @default(dbgenerated("CURRENT_DATE")) @db.Date
+  area         area[]
+  user_service user_service[]
+}
+
+model user_service {
+  user_service_id Int       @id @default(autoincrement())
+  user_id         Int
+  service_id      Int
+  config          Json?     @db.Json
+  created_at      DateTime? @default(dbgenerated("CURRENT_DATE")) @db.Date
+  service         service   @relation(fields: [service_id], references: [service_id], onDelete: Cascade, onUpdate: NoAction)
+  user            user      @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model area_event {
+  area_event_id                     Int       @id @default(autoincrement())
+  area_id                           Int
+  event_id                          Int
+  endpoint_details                  String    @db.VarChar(255)
+  type                              String    @db.VarChar(255)
+  created_at                        DateTime? @default(dbgenerated("CURRENT_DATE")) @db.Date
+  area_area_action_idToarea_event   area[]    @relation("area_action_idToarea_event")
+  area_area_reaction_idToarea_event area[]    @relation("area_reaction_idToarea_event")
+  area_area_event_area_idToarea     area      @relation("area_event_area_idToarea", fields: [area_id], references: [area_id], onDelete: Cascade, onUpdate: NoAction)
+  event                             event     @relation(fields: [event_id], references: [event_id], onDelete: Cascade, onUpdate: NoAction)
+}
