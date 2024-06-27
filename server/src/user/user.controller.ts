@@ -18,6 +18,10 @@ export class UserController {
   getMe(@GetUser() user: user) {
     return user;
   }
+  @Delete('me')
+  deleteMe(@GetUser() user: user) {
+    return this.userService.deleteMe(user);
+  }
   @Get('me/areas')
   getAreas(@GetUser() user: user) {
     return this.userService.getAreas(user);
@@ -27,10 +31,7 @@ export class UserController {
     return this.userService.deleteAreas(user);
   }
   @Patch('me/password')
-  async updatePassword(
-    @Body() password: PasswordEditDto,
-    @GetUser() user: user,
-  ) {
-    await this.userService.updatePasswordAsync(password, user);
+  updatePassword(@Body() password: PasswordEditDto, @GetUser() user: user) {
+    return this.userService.updatePasswordAsync(password, user);
   }
 }
