@@ -1,6 +1,6 @@
 import {
   Body,
-  Controller,
+  Controller, Delete,
   Get, Patch,
   UseGuards
 } from "@nestjs/common";
@@ -21,6 +21,10 @@ export class UserController {
   @Get('me/areas')
   getAreas(@GetUser() user: user) {
     return this.userService.getAreas(user);
+  }
+  @Delete('me/areas')
+  deleteAreas(@GetUser() user: user) {
+    return this.userService.deleteAreas(user);
   }
   @Patch('me/password')
   async updatePassword(
