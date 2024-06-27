@@ -48,4 +48,11 @@ export class UserService {
       },
     });
   }
+  async deleteAreas(user: user) {
+    await this.prisma.area.deleteMany({
+      where: {
+        user_id: user.user_id,
+      },
+    });
+  }
 }
