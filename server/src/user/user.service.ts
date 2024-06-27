@@ -8,6 +8,13 @@ import { PrismaService } from '../prisma/prisma.service';
 export class UserService {
   constructor(private prisma: PrismaService) {}
 
+  async deleteMe(user: user) {
+    await this.prisma.user.delete({
+      where: {
+        user_id: user.user_id,
+      },
+    });
+  }
   async updatePasswordAsync(password: PasswordEditDto, user: user) {
     // verify if the new password and the confirmation password match
     if (password.newPassword != password.newPasswordConfirm) {
