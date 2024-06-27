@@ -18,6 +18,10 @@ export class UserController {
   getMe(@GetUser() user: user) {
     return user;
   }
+  @Get('me/areas')
+  getAreas(@GetUser() user: user) {
+    return this.userService.getAreas(user);
+  }
   @Patch('me/password')
   async updatePassword(
     @Body() password: PasswordEditDto,
