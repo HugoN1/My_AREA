@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe } from "@nestjs/common";
 import { ServiceService } from './service.service';
 
 @Controller('services')
@@ -7,5 +7,9 @@ export class ServiceController {
   @Get()
   getServices() {
     return this.serviceService.getServicesAsync();
+  }
+  @Get(':id')
+  getService(@Param('id', ParseIntPipe) id: number) {
+    return this.serviceService.getServiceAsync(id);
   }
 }
