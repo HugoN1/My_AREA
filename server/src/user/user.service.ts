@@ -38,4 +38,14 @@ export class UserService {
       },
     });
   }
+  async getAreas(user: user) {
+    return this.prisma.user.findUnique({
+      where: {
+        user_id: user.user_id,
+      },
+      select: {
+        area: true,
+      },
+    });
+  }
 }
