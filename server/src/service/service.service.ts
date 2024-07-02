@@ -18,4 +18,15 @@ export class ServiceService {
     }
     return service;
   }
+  async getServiceByNameAsync(name: string) {
+    const service = await this.prisma.service.findUnique({
+      where: {
+        name: name,
+      },
+    });
+    if (!service) {
+      throw new NotFoundException(`Service ${name} not found`);
+    }
+    return service;
+  }
 }
