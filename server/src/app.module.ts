@@ -3,11 +3,10 @@ import { AuthModule } from './auth/auth.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { UserModule } from './user/user.module';
 import { ServiceModule } from './service/service.module';
-import { SpotifyModule } from './service/api_services/spotify/spotify.module';
+import { UserServiceModule } from './user_service/user_service.module';
 
 @Module({
-  imports: [AuthModule, PrismaModule, UserModule, ServiceModule, SpotifyModule],
+  imports: [AuthModule, PrismaModule, UserModule, ServiceModule, UserServiceModule],
   controllers: [],
-  providers: [],
 })
 export class AppModule {}
