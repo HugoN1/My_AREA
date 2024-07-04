@@ -45,7 +45,7 @@ export class SpotifyService {
     const response = await lastValueFrom(
       this.httpService.post(url, bodyParams, { headers }),
     );
-    if (response.data.access_token) {
+    if (response.status == 200 && response.data.access_token) {
       const spotify_service = await this.serviceService.getServiceByNameAsync('spotify');
       const user_service = {
         service_id: spotify_service.service_id,
@@ -83,7 +83,7 @@ export class SpotifyService {
     const response = await lastValueFrom(
       this.httpService.post(url, bodyParams, { headers }),
     );
-    if (response.data.access_token) {
+    if (response.status == 200 && response.data.access_token) {
       // update user service config
       const config = {
         access_token: response.data.access_token,
