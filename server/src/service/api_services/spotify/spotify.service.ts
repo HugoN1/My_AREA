@@ -46,17 +46,27 @@ export class SpotifyService {
       this.httpService.post(url, bodyParams, { headers }),
     );
     if (response.data.access_token) {
-      /*const spotify_service = await this.serviceService.getServiceByNameAsync('spotify');
+      const spotify_service = await this.serviceService.getServiceByNameAsync('spotify');
+      const user_service = {
+        service_id: spotify_service.service_id,
+        config: {
+          access_token: response.data.access_token,
+          token_type: response.data.token_type,
+          scope: response.data.scope,
+          expires_in: response.data.expires_in,
+          refresh_token: response.data.refresh_token,
+        },
+      }
       await this.userServiceService.createNewUserService(
         user.user_id,
-        spotify_service.service_id,
-      );*/
-      return response.data.access_token;
+        user_service,
+      );
+      //return response.data.access_token;
     } else {
       throw new Error('Failed to get access token');
     }
   }
-  async getRefreshToken(refresh_token: string)
+  async getRefreshToken(refresh_token: string, user_service_id: number)
   {
     const url = 'https://accounts.spotify.com/api/token';
     const bodyParams = querystring.stringify({
@@ -69,11 +79,23 @@ export class SpotifyService {
         `${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`,
       ).toString('base64')}`,
     };
+    // send request to get access token
     const response = await lastValueFrom(
       this.httpService.post(url, bodyParams, { headers }),
     );
     if (response.data.access_token) {
-      return response.data.access_token;
+      // update user service config
+      const config = {
+        access_token: response.data.access_token,
+        token_type: response.data.token_type,
+        scope: response.data.scope,
+        expires_in: response.data.expires_in,
+        refresh_token: response.data.refresh_token,
+      };
+      await this.userServiceService.updateUserServiceConfig(
+        user_service_id,
+        config,
+      );
     } else {
       throw new Error('Failed to get access token');
     }
