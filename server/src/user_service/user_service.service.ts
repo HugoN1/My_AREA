@@ -14,4 +14,14 @@ export class UserServiceService {
       },
     });
   }
+  async updateUserServiceConfig(user_service_id: number, config: object) {
+    return this.prisma.user_service.update({
+      where: {
+        user_service_id: user_service_id,
+      },
+      data: {
+        config: config,
+      },
+    });
+  }
 }
